@@ -1,7 +1,9 @@
-# ansible install kubernetes containerd calico cluster 
+# Ansible install kubernetes containerd calico cluster 
 
-完整图文文档地址
+查看完整图文文档，请点解下面链接：
+
 使用 ansible 一键安装kubernetes+containerd+calico集群
+
 https://zhpengfei.com/ansible-kubernetes-containerd-calico-install/
 
 因为老电脑用久了，太慢了，近期买了macbook pro m2，安装虚拟机fusion后，想用ansible 快速安装kubernetes集群
