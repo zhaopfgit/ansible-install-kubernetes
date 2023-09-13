@@ -1,0 +1,2 @@
+[host."https://dbxvt5s3.mirror.aliyuncs.com",host."https://registry.docker-cn.com"]
+capabilities = ["pull"]

@@ -1,0 +1,39 @@
+- name: 配置hosts
+  template: src=hosts.j2 dest=/etc/hosts
+- name: SELINUX=disabled
+  selinux: state=disabled
+- name: firewalld stop
+  shell: systemctl stop firewalld;systemctl disable firewalld
+- name: swapoff
+  shell: swapoff -a;sed -i 's@^/dev/mapper/cl_fedora-swap none                    swap    defaults        0 0@#&@' /etc/fstab
+- name:
+  shell: modprobe br_netfilter;echo "modprobe br_netfilter" >> /etc/profile
+- name:
+  copy: src=kubernetes.conf dest=/etc/sysctl.d/kubernetes.conf
+- name: 
+  yum: name=yum-utils state=latest
+- name:
+  shell: yum-config-manager --add-repo http://mirrors.aliyun.com/docker-ce/linux/centos/docker-ce.repo
+- name:
+  shell: yum install -y  device-mapper-persistent-data lvm2 wget net-tools nfs-utils lrzsz gcc gcc-c++ make cmake libxml2-devel openssl-devel curl curl-devel unzip sudo libaio-devel wget vim ncurses-devel autoconf automake zlib-devel epel-release openssh-server socat  ipvsadm conntrack  telnet ipvsadm
+- name: 配置kubernetes国内源
+  copy: src=kubernetes.repo dest=/etc/yum.repos.d/kubernetes.repo
+- name: 
+  shell: yum clean all;yum makecache
+- name: 配置时间同步
+  shell: yum install -y chrony
+- name: 修改chrony配置
+  shell: sed -i 's/#pool 2.centos.pool.ntp.org iburst/server ntp1.aliyun.com iburst\nserver ntp2.aliyun.com iburst\nserver ntp3.aliyun.com iburst/g' /etc/chrony.conf
+- name: restart chrony
+  service: name=chronyd state=restarted
+- name: enable chronyd 
+  shell: systemctl enable chronyd
+- name:  安装docker-ce
+  yum: name=docker-ce state=present
+- name: 目录不存在则创建
+  file: path=/etc/docker state=directory
+- name: 配置docker镜像加速
+  copy: src=daemon.json dest=/etc/docker/daemon.json
+  notify: restart docker
+- name: 启动docker并开机自动启动
+  shell: systemctl enable docker --now

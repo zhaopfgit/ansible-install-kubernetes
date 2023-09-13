@@ -1,0 +1,4 @@
+- name: restart containerd
+  service: name=containerd state=restarted
+- name: restart docker
+  service: name=docker state=restarted

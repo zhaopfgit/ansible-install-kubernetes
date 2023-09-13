@@ -1,0 +1,4 @@
+- hosts: rancher   #选择需要执行的主机组或IP
+  remote_user: root  #远程执行用户
+  roles:
+  - kubernetes
